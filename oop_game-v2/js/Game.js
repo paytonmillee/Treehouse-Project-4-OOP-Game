@@ -2,7 +2,8 @@ class Game {
   constructor() {
     this.missed = 0;
     this.phrases = [
-      // this is an array of phrases for the game
+      // this is an array of phrases for the game to g othrough each time game is
+      //lost or won.
       "Wow coding is fun",
       "Coding can be hard",
       "Coding taught me a lot",
@@ -17,6 +18,7 @@ class Game {
     this.activePhrase.addPhraseToDisplay();
 
     document.getElementById("overlay").style.display = "none";
+    //removes the start game overlay when button is selected to play
   }
 
   getRandomPhrase() {
@@ -31,12 +33,11 @@ class Game {
     this method controls most of the game logic. It checks to see if the button clicked by
     the player matches a letter in the phrase, and then directs the game based on a correct 
     or incorrect guess.
-   * @param {object} key : this is the button element selected by the user
+  
    * 
    */
 
   handleInteraction(key) {
-    console.log(key);
     key.disabled = true;
     let letter = key.innerText;
     let isMatched = this.activePhrase.checkLetter(letter);
@@ -54,16 +55,10 @@ class Game {
     //removes a heart if missed try in the game
     if (this.missed < 4) {
       const scoreboard = document.getElementById("scoreboard");
-      const image = scoreboard.getElementsByTagName("img");
-      let currentImage = image[this.missed];
+      const images = scoreboard.getElementsByTagName("img");
+      let currentImage = images[this.missed];
 
-      if (currentImage.src.includes("liveHeart.png")) {
-        let lostHeart = currentImage.src.replace(
-          "liveHeart.png",
-          "lostHeart.png"
-        );
-        currentImage.src = lostHeart;
-      }
+      currentImage.src = "images/lostHeart.png";
     } else {
       this.gameOver();
     }
@@ -71,15 +66,15 @@ class Game {
   }
 
   checkForWin() {
-    // is checking for the winning move from the players tries and then will display win if you win
+    // is checking for the winning move from the players tries and then will display win if you win(false)
     let hiddenLetters = document.getElementsByClassName("hide");
     if (!hiddenLetters.length) {
       this.gameOver(true);
     }
   }
   gameOver(won) {
-    // is checking for the losing move from the players tries and then will display loss of you lose
-    document.getElementById("overlay").style.display = "block";
+    // is checking for the losing move from the players tries and then will display loss of you lose(true)
+    document.getElementById("overlay").style.display = "flex";
     let gameMessage = document.getElementById("game-over-message");
 
     if (won) {
@@ -89,39 +84,22 @@ class Game {
       gameMessage.textContent = "OOPsie Daisies, try again!";
       document.getElementById("overlay").className = "lose";
     }
-    // Reset the game board
-
-    let firstPhrase = document.getElementById("phrase").firstElementChild;
-    firstPhrase.innerHTML = "";
-
-    // Reset buttons on screen
-    const button = document.querySelectorAll(".keyrow");
-
-    for (const letters of button) {
-      let items = letters.children;
-      console.log(items);
-      for (const element of items) {
-        element.className = "key";
-        element.removeAttribute("disabled");
-      }
-      this.resetGame();
-    }
-  }
-  // Reset lives
-
-  resetGame() {
-    // this resets the game board once you hav e won or lost the game
-    this.activePhrase = null;
-    document.querySelector("#phrase ul").innerHTML = "";
-    const keys = document.querySelectorAll("#qwerty button");
-
+    //resetting of game board
+    let keys = document.querySelectorAll(".key");
     keys.forEach((key) => {
       key.disabled = false;
-      key.classList.remove("chosen", "wrong");
-      key.classList.add("key");
+      console.log(typeof key);
+      console.log(key);
+      key.classList.remove("wrong");
+      key.classList.remove("chosen");
     });
-    document.querySelectorAll(".tries img").forEach((img) => {
-      img.src = "images/liveHeart.png";
-    });
+    const ul = document.getElementById("phrase");
+    ul.innerHTML = "";
+    const scoreboard = document.getElementById("scoreboard");
+    const images = scoreboard.getElementsByTagName("img");
+
+    for (let i = 0; i < images.length; i++) {
+      images[i].src = "images/liveHeart.png";
+    }
   }
 }
