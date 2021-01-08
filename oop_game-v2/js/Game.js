@@ -2,7 +2,7 @@ class Game {
   constructor() {
     this.missed = 0;
     this.phrases = [
-      // this is an array of phrases for the game to g othrough each time game is
+      // this is an array of phrases for the game to go through each time game is
       //lost or won.
       "Wow coding is fun",
       "Coding can be hard",
