@@ -4,18 +4,17 @@ class Phrase {
   }
   // displays the chosen phrase in random order on the game board
   addPhraseToDisplay() {
-    console.log(this.phrase);
     const letters = this.phrase.split("");
     const ul = document.getElementById("phrase");
 
     let html = ``;
-    for (let i = 0; i < letters.length; i++) {
-      if (letters[i] === " ") {
+    letters.forEach((letter) => {
+      if (letter === " ") {
         html += `<li class="space"> </li>`;
       } else {
-        html += `<li class="hide letter ${letters[i]}">${letters[i]}</li>`;
+        html += `<li class="hide letter ${letter}">${letter}</li>`;
       }
-    }
+    });
 
     ul.insertAdjacentHTML("beforeend", html);
   }
@@ -30,18 +29,22 @@ class Phrase {
    *
    */
   checkLetter(letter) {
-    return this.phrase.includes(letter);
+    if (this.phrase.includes(letter)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Shows matched letters that were chosen by the user.
   showMatchedLetter(letter) {
-    console.log(letter);
-    let match = document
+    let matches = document
       .getElementById("phrase")
       .getElementsByClassName(letter);
-    console.log(match);
-    for (let i = 0; i < match.length; i++) {
-      match[i].classList.replace("hide", "show");
-    }
+    //must make collection into an array to use array methods
+    //learned from https://stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach
+    Array.from(matches).forEach((match) => {
+      match.classList.replace("hide", "show");
+    });
   }
 }
